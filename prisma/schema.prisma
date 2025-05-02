@@ -1,0 +1,55 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // assuming Postgres (best with Prisma)
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(cuid())
+  email          String   @unique
+  name           String?
+  credits        Int      @default(0)
+  isSubscribed   Boolean  @default(false)
+  stripeCustomerId String?
+  stripeSubscriptionId String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  landingPages   LandingPage[]
+}
+
+model LandingPage {
+  id             String   @id @default(cuid())
+  title          String
+  slug           String   @unique
+  customDomain   String?  // for user custom domain (optional)
+  description    String?
+  content        Json     // generated and/or user-edited content
+  published      Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  
+  templateId     String?
+  template       Template? @relation(fields: [templateId], references: [id])
+}
+
+model Template {
+  id             String          @id @default(cuid())
+  name           String
+  description    String?
+  previewImage   String?
+  defaultContent Json
+  createdAt      DateTime        @default(now())
+  landingPages   LandingPage[]
+}
+
