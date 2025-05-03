@@ -21,7 +21,6 @@ export async function GET() {
       },
       select: {
         id: true,
-        name: true,
         description: true,
         published: true,
         createdAt: true,
@@ -29,7 +28,6 @@ export async function GET() {
         template: {
           select: {
             name: true,
-            thumbnail: true
           }
         }
       },
@@ -72,16 +70,13 @@ export async function POST(req: Request) {
         where: {
           id: templateId
         },
-        select: {
-          content: true
-        }
       });
 
       if (!template) {
         return new NextResponse("Template not found", { status: 404 });
       }
 
-      templateContent = template.content;
+      templateContent = template.defaultContent;
     }
 
     // Create default empty content if no template
@@ -103,11 +98,12 @@ export async function POST(req: Request) {
 
     const landingPage = await db.landingPage.create({
       data: {
-        name,
         description,
         userId: user.id,
         templateId,
-        content: defaultContent
+        content: defaultContent,
+        title: name,
+        slug: name.toLowerCase().replace(/ /g, '-')
       }
     });
 
