@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Search, Plus } from 'lucide-react';
+import Image from 'next/image';
 
 interface Template {
   id: string;
@@ -161,7 +161,7 @@ const CreateWebsitePage = () => {
           >
             <div className="aspect-w-16 aspect-h-9 w-full overflow-hidden bg-gray-200 dark:bg-gray-700">
               {template.thumbnail ? (
-                <img
+                <Image
                   src={template.thumbnail}
                   alt={template.name}
                   className="h-full w-full object-cover object-center transition-transform duration-200 group-hover:scale-105"
@@ -198,7 +198,7 @@ const CreateWebsitePage = () => {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
           <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No templates found</h3>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Try adjusting your search or filter to find what you're looking for.</p>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Try adjusting your search or filter to find what you&apos;re looking for.</p>
         </div>
       )}
     </div>

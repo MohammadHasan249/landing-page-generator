@@ -9,7 +9,7 @@ interface LandingPage {
   id: string;
   name: string;
   description: string | null;
-  content: any;
+  content: Record<string, unknown>;
   published: boolean;
 }
 
@@ -87,7 +87,7 @@ export default function EditorPage() {
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
           <h2 className="text-xl font-semibold mb-2">Landing page not found</h2>
-          <p className="mb-4">The landing page you're looking for doesn't exist or you don't have access to it.</p>
+          <p className="mb-4">The landing page you&apos;re looking for doesn&apos;t exist or you don&apos;t have access to it.</p>
           <Link 
             href="/dashboard"
             className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"

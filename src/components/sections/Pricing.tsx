@@ -13,8 +13,6 @@ interface PricingPlan {
   recommended: boolean;
 }
 
-interface PricingCardProps extends PricingPlan {}
-
 const PricingCard = ({ 
   title, 
   price, 
@@ -22,7 +20,7 @@ const PricingCard = ({
   features, 
   buttonText, 
   recommended = false 
-}: PricingCardProps) => {
+}: PricingPlan) => {
   return (
     <div className={`relative rounded-xl ${
       recommended 
@@ -131,7 +129,7 @@ const Pricing = () => {
           
           <div className="mb-12 text-lg text-gray-600 dark:text-gray-300">
             <p>
-              Choose the plan that fits your needs. Whether you're an agency or a solo entrepreneur, we've got you covered.
+              Choose the plan that fits your needs. Whether you&apos;re an agency or a solo entrepreneur, we&apos;ve got you covered.
             </p>
           </div>
         </div>

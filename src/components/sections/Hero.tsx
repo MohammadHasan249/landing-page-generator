@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '../ui/Button';
 
 const Hero = () => {
@@ -56,9 +57,11 @@ const Hero = () => {
             </div>
             
             <div className="relative mx-auto mt-12 max-w-4xl overflow-hidden rounded-xl border border-gray-200 shadow-xl dark:border-gray-700">
-              <img 
+              <Image 
                 src="https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1104&q=80" 
                 alt="Landing page generator demo" 
+                width={1104}
+                height={622}
                 className="w-full"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent">

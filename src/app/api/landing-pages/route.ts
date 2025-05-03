@@ -3,7 +3,6 @@ import { db } from '@/lib/db';
 import { getCurrentUser } from '@/lib/user';
 
 export async function GET() {
-  return NextResponse.json({ message: "Hello, world!" });
   try {
     const user = await getCurrentUser();
 
@@ -11,6 +10,10 @@ export async function GET() {
     // if (!user) {
     //   return new NextResponse("Unauthorized", { status: 401 });
     // }
+
+    if (!user) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
 
     const landingPages = await db.landingPage.findMany({
       where: {
@@ -50,6 +53,10 @@ export async function POST(req: Request) {
     // if (!user) {
     //   return new NextResponse("Unauthorized", { status: 401 });
     // }
+
+    if (!user) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
 
     const body = await req.json();
     const { name, description, templateId } = body;

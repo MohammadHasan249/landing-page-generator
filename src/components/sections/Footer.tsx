@@ -6,8 +6,8 @@ import { Logo } from '../ui/Logo';
 import { useTheme } from 'next-themes';
 
 const Footer = () => {
-  const { theme } = useTheme();
-  const logoVariant = theme === 'dark' ? 'dark' : 'light';
+  const { resolvedTheme } = useTheme();
+  const logoVariant = resolvedTheme === 'dark' ? 'dark' : 'light';
   
   const currentYear = new Date().getFullYear();
   

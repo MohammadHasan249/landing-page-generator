@@ -15,7 +15,7 @@ export function DogTag({ className = '' }: DogTagProps) {
       
       <div className="text-center">
         <p className="text-lg font-medium text-gray-800 dark:text-gray-200">
-          "We wouldn't sell it if we didn't use it ourselves."
+          &quot;We wouldn&apos;t sell it if we didn&apos;t use it ourselves.&quot;
         </p>
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
           This entire website was created with our AI landing page generator.

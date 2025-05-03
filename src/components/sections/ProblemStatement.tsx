@@ -1,11 +1,8 @@
 'use client';
 
 import React from 'react';
-import { useTheme } from 'next-themes';
 
 const ProblemStatement = () => {
-  const { theme } = useTheme();
-  const isDark = theme === 'dark';
 
   return (
     <section className="py-20 bg-white dark:bg-gray-900">

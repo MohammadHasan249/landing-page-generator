@@ -14,7 +14,7 @@ const Solution = () => {
           
           <div className="mb-12 text-lg text-gray-600 dark:text-gray-300">
             <p className="mb-6">
-              We've created an AI-powered landing page generator that automatically creates
+              We&apos;ve created an AI-powered landing page generator that automatically creates
               beautiful, high-converting pages in minutes.
             </p>
           </div>

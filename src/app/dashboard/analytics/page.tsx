@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 
 interface WebsiteAnalytics {
   id: string;
@@ -101,7 +100,7 @@ const AnalyticsPage = () => {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">Website Analytics</h1>
-          <p className="mt-1 text-sm text-gray-500">Track your websites' performance and conversions</p>
+          <p className="mt-1 text-sm text-gray-500">Track your websites&apos; performance and conversions</p>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
           <select

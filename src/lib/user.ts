@@ -1,4 +1,4 @@
-import { db } from "./db";
+// import { db } from "./db";
 
 // Mock user interface to match our database schema
 interface MockUser {

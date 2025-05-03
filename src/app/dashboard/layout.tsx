@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { UserButton, useUser, useClerk } from '@clerk/nextjs';
+import { useUser, useClerk } from '@clerk/nextjs';
 import { HomeIcon, Layers3Icon, PlusIcon, BarChart3Icon, LogOutIcon, UserIcon } from 'lucide-react';
 
 interface SidebarItem {

@@ -50,7 +50,7 @@ export default function ContactSalesPage() {
           </Link>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white md:text-4xl">Contact Our Sales Team</h1>
           <p className="mt-3 text-lg text-gray-600 dark:text-gray-300">
-            Let's discuss how Genique can help your agency create faster, better landing pages
+            Let&apos;s discuss how Genique can help your agency create faster, better landing pages
           </p>
         </div>
         
@@ -166,7 +166,7 @@ export default function ContactSalesPage() {
               </div>
               
               <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-                We'll get back to you within 24 hours during business days.
+                We&apos;ll get back to you within 24 hours during business days.
               </p>
             </form>
           ) : (
@@ -210,7 +210,7 @@ export default function ContactSalesPage() {
             </div>
             <h3 className="mb-2 text-lg font-semibold text-gray-900 dark:text-white">White Labeling</h3>
             <p className="text-gray-600 dark:text-gray-300">
-              Customize the platform with your agency's branding for a seamless client experience.
+              Customize the platform with your agency&apos;s branding for a seamless client experience.
             </p>
           </div>
           

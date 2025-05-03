@@ -1,19 +1,17 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { getCurrentUser } from '@/lib/user';
 
-// GET a single landing page
 export async function GET(
-  req: Request,
+  req: NextRequest,
   { params }: { params: { landingPageId: string } }
 ) {
   try {
     const user = await getCurrentUser();
 
-    // Using a mock user, so no need to check
-    // if (!user) {
-    //   return new NextResponse("Unauthorized", { status: 401 });
-    // }
+    if (!user) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
 
     const landingPage = await db.landingPage.findUnique({
       where: {
@@ -41,10 +39,11 @@ export async function GET(
   }
 }
 
+
 // PATCH to update a landing page
 export async function PATCH(
   req: Request,
-  { params }: { params: { landingPageId: string } }
+  context: { params: { landingPageId: string } }
 ) {
   try {
     const user = await getCurrentUser();
@@ -54,13 +53,17 @@ export async function PATCH(
     //   return new NextResponse("Unauthorized", { status: 401 });
     // }
 
+    if (!user) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     const body = await req.json();
     const { name, description, content, published } = body;
 
     // Get current landing page
     const landingPage = await db.landingPage.findUnique({
       where: {
-        id: params.landingPageId,
+        id: context.params.landingPageId,
         userId: user.id
       }
     });
@@ -72,7 +75,7 @@ export async function PATCH(
     // Update the landing page
     const updatedLandingPage = await db.landingPage.update({
       where: {
-        id: params.landingPageId
+        id: context.params.landingPageId
       },
       data: {
         name: name !== undefined ? name : landingPage.name,
@@ -92,7 +95,7 @@ export async function PATCH(
 // DELETE a landing page
 export async function DELETE(
   req: Request,
-  { params }: { params: { landingPageId: string } }
+  context: { params: { landingPageId: string } }
 ) {
   try {
     const user = await getCurrentUser();
@@ -102,10 +105,14 @@ export async function DELETE(
     //   return new NextResponse("Unauthorized", { status: 401 });
     // }
 
+    if (!user) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
+
     // Check if landing page exists and belongs to user
     const landingPage = await db.landingPage.findUnique({
       where: {
-        id: params.landingPageId,
+        id: context.params.landingPageId,
         userId: user.id
       }
     });
@@ -117,7 +124,7 @@ export async function DELETE(
     // Delete the landing page
     await db.landingPage.delete({
       where: {
-        id: params.landingPageId
+        id: context.params.landingPageId
       }
     });
 

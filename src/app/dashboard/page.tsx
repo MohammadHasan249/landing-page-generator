@@ -3,14 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { PlusIcon } from 'lucide-react';
-
-interface Template {
-  id: string;
-  name: string;
-  description: string;
-  thumbnail: string;
-  category: string;
-}
+import Image from 'next/image';
 
 interface LandingPage {
   id: string;
@@ -86,7 +79,7 @@ export default function DashboardPage() {
             <div key={page.id} className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-md transition-all hover:shadow-lg dark:border-gray-700 dark:bg-gray-800">
               <div className="aspect-video w-full overflow-hidden bg-gray-100 dark:bg-gray-700">
                 {page.template?.thumbnail ? (
-                  <img 
+                  <Image 
                     src={page.template.thumbnail} 
                     alt={page.name} 
                     className="h-full w-full object-cover"
@@ -126,7 +119,7 @@ export default function DashboardPage() {
           {landingPages.length === 0 && (
             <div className="col-span-full flex h-64 items-center justify-center rounded-lg border border-dashed border-gray-300 bg-white dark:border-gray-700 dark:bg-gray-800">
               <div className="text-center px-4">
-                <p className="mb-4 text-gray-600 dark:text-gray-300">You haven't created any landing pages yet.</p>
+                <p className="mb-4 text-gray-600 dark:text-gray-300">You haven&apos;t created any landing pages yet.</p>
                 <Link 
                   href="/dashboard/create-website"
                   className="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500"
