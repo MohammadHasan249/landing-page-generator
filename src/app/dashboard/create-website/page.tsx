@@ -54,7 +54,7 @@ const CreateWebsitePage = () => {
       name: 'Product Launch',
       description: 'Perfect for new product announcements',
       thumbnail: 'https://placehold.co/600x400/ffe6e6/990000?text=Launch',
-      category: 'landing',
+      category: 'business',
     },
     {
       id: '6',
@@ -71,7 +71,6 @@ const CreateWebsitePage = () => {
     { id: 'portfolio', name: 'Portfolio' },
     { id: 'ecommerce', name: 'E-commerce' },
     { id: 'blog', name: 'Blog' },
-    { id: 'landing', name: 'Landing Page' },
   ];
 
   // Filter templates based on selected category and search query
@@ -162,6 +161,8 @@ const CreateWebsitePage = () => {
             <div className="aspect-w-16 aspect-h-9 w-full overflow-hidden bg-gray-200 dark:bg-gray-700">
               {template.thumbnail ? (
                 <Image
+                  width={100}
+                  height={100}
                   src={template.thumbnail}
                   alt={template.name}
                   className="h-full w-full object-cover object-center transition-transform duration-200 group-hover:scale-105"
