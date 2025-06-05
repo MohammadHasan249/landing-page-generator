@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useUser, useClerk } from '@clerk/nextjs';
 import { HomeIcon, Layers3Icon, PlusIcon, BarChart3Icon, LogOutIcon, UserIcon } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 interface SidebarItem {
   name: string;
@@ -68,6 +69,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
           <Link href="/dashboard" className="text-xl font-bold text-blue-600 dark:text-blue-400">
             Genique
           </Link>
+          <ThemeToggle />
         </div>
         <nav className="flex flex-col gap-1 p-4">
           {navigation.map((item) => (
@@ -108,6 +110,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
             <Link href="/dashboard" className="text-xl font-bold text-blue-600 dark:text-blue-400">
               Genique
             </Link>
+            <ThemeToggle />
           </div>
           
           <div className="mt-4 flex gap-1 overflow-x-auto pb-2">
