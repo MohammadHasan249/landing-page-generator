@@ -2,6 +2,14 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { Webhook } from 'svix';
 
+export async function GET() {
+  return NextResponse.json({ 
+    status: "Webhook endpoint is working",
+    methods: ["POST"],
+    description: "This endpoint accepts POST requests from Clerk webhooks"
+  });
+}
+
 export async function POST(req: Request) {
   console.log("🔔 Clerk webhook received");
   
