@@ -14,6 +14,14 @@ interface User {
   updatedAt: Date;
 }
 
+// Interface for Clerk user data from webhooks
+interface ClerkUser {
+  id: string;
+  email_addresses: Array<{ email_address: string }>;
+  first_name?: string;
+  last_name?: string;
+}
+
 // Get current authenticated user from Clerk and sync with database
 export async function getCurrentUser(): Promise<User | null> {
   try {
@@ -24,7 +32,7 @@ export async function getCurrentUser(): Promise<User | null> {
     }
 
     // Try to find user in our database
-    let user = await db.user.findUnique({
+    const user = await db.user.findUnique({
       where: { id: userId }
     });
 
@@ -43,7 +51,7 @@ export async function getCurrentUser(): Promise<User | null> {
 }
 
 // Create user if not exists - mainly used by webhook, but keeping for compatibility
-export async function createUserIfNotExists(clerkUser: any): Promise<User | null> {
+export async function createUserIfNotExists(clerkUser: ClerkUser): Promise<User | null> {
   try {
     const user = await db.user.upsert({
       where: { id: clerkUser.id },

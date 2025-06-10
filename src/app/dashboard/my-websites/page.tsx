@@ -100,7 +100,7 @@ const MyWebsitesPage = () => {
         
         // Remove from local state
         setLandingPages(landingPages.filter(page => page.id !== id));
-      } catch (err) {
+      } catch {
         alert('Failed to delete landing page. Please try again.');
       }
     }
@@ -358,7 +358,7 @@ const MyWebsitesPage = () => {
                 <td colSpan={6} className="px-6 py-4 text-center text-sm text-gray-500">
                   {searchQuery ? (
                     <>
-                      No websites found matching "{searchQuery}". Try adjusting your search or{' '}
+                      No websites found matching &ldquo;{searchQuery}&rdquo;. Try adjusting your search or{' '}
                       <Link href="/dashboard/create-website">
                         <span className="text-blue-600 hover:text-blue-900 cursor-pointer">
                           create a new one
@@ -367,7 +367,7 @@ const MyWebsitesPage = () => {
                     </>
                   ) : (
                     <>
-                      You haven't created any websites yet.{' '}
+                      You haven&apos;t created any websites yet.{' '}
                       <Link href="/dashboard/create-website">
                         <span className="text-blue-600 hover:text-blue-900 cursor-pointer">
                           Create your first website
