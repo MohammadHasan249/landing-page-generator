@@ -1,4 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { db } from "./db";
 
 // User interface that matches our database schema
@@ -40,19 +40,31 @@ export async function getCurrentUser(): Promise<User | null> {
     if (!user) {
       console.log(`User ${userId} authenticated with Clerk but not found in database. Creating user...`);
       
-      // We don't have full Clerk user data here, so create with minimal info
-      // The webhook should normally handle this, but this is a fallback
       try {
+        // Fetch full user data from Clerk using currentUser helper
+        const clerkUserData = await currentUser();
+        
+        if (!clerkUserData) {
+          console.error(`Failed to fetch user data from Clerk for userId: ${userId}`);
+          return null;
+        }
+        
+        const email = clerkUserData.emailAddresses.find((e: any) => e.id === clerkUserData.primaryEmailAddressId)?.emailAddress || 
+                     clerkUserData.emailAddresses[0]?.emailAddress || 
+                     `user_${userId}@placeholder.local`; // fallback email
+        
+        const name = `${clerkUserData.firstName || ''} ${clerkUserData.lastName || ''}`.trim() || null;
+        
         user = await db.user.create({
           data: {
             id: userId,
-            email: '', // Will be updated by webhook or user profile
-            name: null,
+            email: email,
+            name: name,
             credits: 10, // Default credits
             isSubscribed: false,
           },
         });
-        console.log(`Successfully created user ${userId} in database`);
+        console.log(`Successfully created user ${userId} in database with email ${email}`);
       } catch (createError) {
         console.error(`Failed to create user ${userId} in database:`, createError);
         return null;
