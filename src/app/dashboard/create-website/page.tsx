@@ -1,207 +1,221 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Search, Plus } from 'lucide-react';
-import Image from 'next/image';
+import { Sparkles, Plus, ChevronRight, Eye } from 'lucide-react';
+import Link from 'next/link';
 
 interface Template {
   id: string;
   name: string;
   description: string | null;
-  thumbnail: string | null;
-  category: string;
 }
 
 const CreateWebsitePage = () => {
   const router = useRouter();
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [createLoading, setCreateLoading] = useState(false);
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Mock templates data
-  const templates: Template[] = [
-    {
-      id: '1',
-      name: 'Business Landing Page',
-      description: 'Perfect for small businesses and startups',
-      thumbnail: 'https://placehold.co/600x400/e6f7ff/0072b1?text=Business',
-      category: 'business',
-    },
-    {
-      id: '2',
-      name: 'Portfolio Showcase',
-      description: 'Showcase your work with this elegant portfolio template',
-      thumbnail: 'https://placehold.co/600x400/fff5e6/cc7000?text=Portfolio',
-      category: 'portfolio',
-    },
-    {
-      id: '3',
-      name: 'E-commerce Store',
-      description: 'Start selling products with this e-commerce template',
-      thumbnail: 'https://placehold.co/600x400/e6ffe6/00730a?text=E-commerce',
-      category: 'ecommerce',
-    },
-    {
-      id: '4',
-      name: 'Blog Template',
-      description: 'Share your thoughts with this blog template',
-      thumbnail: 'https://placehold.co/600x400/f7e6ff/5c0099?text=Blog',
-      category: 'blog',
-    },
-    {
-      id: '5',
-      name: 'Product Launch',
-      description: 'Perfect for new product announcements',
-      thumbnail: 'https://placehold.co/600x400/ffe6e6/990000?text=Launch',
-      category: 'business',
-    },
-    {
-      id: '6',
-      name: 'Professional Services',
-      description: 'Ideal for consultants and service providers',
-      thumbnail: 'https://placehold.co/600x400/e6f7ff/0072b1?text=Services',
-      category: 'business',
-    },
-  ];
+  // Fetch templates from API
+  useEffect(() => {
+    const fetchTemplates = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/templates');
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch templates');
+        }
+        
+        const data = await response.json();
+        setTemplates(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An error occurred');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const categories = [
-    { id: 'all', name: 'All Templates' },
-    { id: 'business', name: 'Business' },
-    { id: 'portfolio', name: 'Portfolio' },
-    { id: 'ecommerce', name: 'E-commerce' },
-    { id: 'blog', name: 'Blog' },
-  ];
+    fetchTemplates();
+  }, []);
 
-  // Filter templates based on selected category and search query
-  const filteredTemplates = templates.filter((template) => {
-    const matchesCategory = selectedCategory === 'all' || template.category === selectedCategory;
-    const matchesSearch = searchQuery === '' || 
-      template.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      (template.description && template.description.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesCategory && matchesSearch;
-  });
+  const handleTemplateSelect = (templateId?: string) => {
+    const url = templateId 
+      ? `/dashboard/create-website/form?templateId=${templateId}`
+      : '/dashboard/create-website/form';
+    router.push(url);
+  };
 
-  function createLandingPage(templateId?: string) {
-    setCreateLoading(true);
-    
-    // Mock creating a landing page - in a real app this would call an API
-    console.log(`Creating landing page with template ID: ${templateId || 'blank'}`);
-    
-    // Simulate a successful creation and redirect
-    setTimeout(() => {
-      const mockId = `mock-${Math.random().toString(36).substring(2, 9)}`;
-      router.push(`/dashboard/editor/${mockId}`);
-      setCreateLoading(false);
-    }, 1000);
+  const handleStartFromScratch = () => {
+    router.push('/dashboard/create-website/form');
+  };
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-2xl font-bold text-gray-900">Create Website</h1>
+        </div>
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          <span className="ml-2 text-gray-600">Loading templates...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <h1 className="text-2xl font-bold text-gray-900">Create Website</h1>
+        </div>
+        <div className="bg-red-50 border border-red-200 rounded-md p-4">
+          <div className="flex">
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-red-800">Error loading templates</h3>
+              <div className="mt-2 text-sm text-red-700">{error}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">Create New Website</h1>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Choose a template to get started or start from scratch</p>
-        </div>
-        <button
-          onClick={() => createLandingPage()}
-          disabled={createLoading}
-          className="inline-flex items-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-200 disabled:opacity-50 dark:bg-blue-900/20 dark:text-blue-300 dark:hover:bg-blue-900/30"
-        >
-          <Plus className="mr-2 -ml-1 h-4 w-4" />
-          Blank Canvas
-        </button>
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="text-center">
+        <h1 className="text-3xl font-bold text-gray-900">Create Your Website</h1>
+        <p className="mt-4 text-lg text-gray-600">
+          Choose a template to get started quickly, or start from scratch
+        </p>
       </div>
 
-      {/* Search and Category Filter */}
-      <div className="flex flex-col gap-4 sm:flex-row">
-        <div className="w-full sm:w-64">
-          <label htmlFor="search" className="sr-only">
-            Search templates
-          </label>
-          <div className="relative rounded-md shadow-sm">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-              <Search className="h-5 w-5 text-gray-400 dark:text-gray-500" />
-            </div>
-            <input
-              type="text"
-              name="search"
-              id="search"
-              className="block w-full rounded-md border-gray-300 pl-10 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400 sm:text-sm"
-              placeholder="Search templates"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          {categories.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => setSelectedCategory(category.id)}
-              className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                selectedCategory === category.id
-                  ? 'bg-blue-600 text-white dark:bg-blue-700'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700'
-              }`}
-            >
-              {category.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Templates Grid */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {filteredTemplates.map((template) => (
-          <div
-            key={template.id}
-            className="group overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:shadow-md dark:border-gray-700 dark:bg-gray-800"
-          >
-            <div className="aspect-w-16 aspect-h-9 w-full overflow-hidden bg-gray-200 dark:bg-gray-700">
-              {template.thumbnail ? (
-                <Image
-                  width={100}
-                  height={100}
-                  src={template.thumbnail}
-                  alt={template.name}
-                  className="h-full w-full object-cover object-center transition-transform duration-200 group-hover:scale-105"
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center bg-gray-100 dark:bg-gray-700">
-                  <span className="text-gray-400 dark:text-gray-500">No preview</span>
-                </div>
-              )}
-            </div>
-            <div className="p-4">
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white">{template.name}</h3>
-              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{template.description}</p>
-              <div className="mt-4 flex items-center justify-between">
-                <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:bg-blue-900/20 dark:text-blue-300">
-                  {template.category.charAt(0).toUpperCase() + template.category.slice(1)}
-                </span>
-                <button
-                  onClick={() => createLandingPage(template.id)}
-                  disabled={createLoading}
-                  className="rounded-md bg-white px-3 py-1.5 text-sm font-medium text-blue-600 hover:bg-blue-50 disabled:opacity-50 dark:bg-gray-700 dark:text-blue-300 dark:hover:bg-gray-600"
-                >
-                  Use Template
-                </button>
+      {/* Start from Scratch Option */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-200 p-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className="flex-shrink-0">
+              <div className="flex items-center justify-center w-12 h-12 bg-blue-500 rounded-md">
+                <Plus className="w-6 h-6 text-white" />
               </div>
             </div>
+            <div>
+              <h3 className="text-lg font-medium text-gray-900">Start from Scratch</h3>
+              <p className="text-gray-600">
+                Create a completely custom website with our drag-and-drop editor
+              </p>
+            </div>
           </div>
-        ))}
+          <button
+            onClick={handleStartFromScratch}
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            <Sparkles className="mr-2 h-4 w-4" />
+            Start Building
+            <ChevronRight className="ml-2 h-4 w-4" />
+          </button>
+        </div>
       </div>
 
-      {filteredTemplates.length === 0 && (
-        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 py-12 dark:border-gray-700">
-          <svg className="h-12 w-12 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">No templates found</h3>
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Try adjusting your search or filter to find what you&apos;re looking for.</p>
+      {/* Templates Section */}
+      <div>
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">
+          Or choose from our templates
+        </h2>
+        
+        {templates.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="text-gray-400 mb-4">
+              <svg className="mx-auto h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No templates available</h3>
+            <p className="text-gray-600 mb-6">
+              Templates are coming soon! For now, you can start from scratch.
+            </p>
+            <button
+              onClick={handleStartFromScratch}
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Create Custom Website
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {templates.map((template) => (
+              <div
+                key={template.id}
+                className="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200"
+              >
+                {/* Template Preview */}
+                <div className="h-48 bg-gray-100 rounded-t-lg flex items-center justify-center">
+                  <div className="text-center text-gray-400">
+                    <Eye className="mx-auto h-8 w-8 mb-2" />
+                    <span className="text-sm">Template Preview</span>
+                  </div>
+                </div>
+                
+                {/* Template Info */}
+                <div className="p-4">
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    {template.name}
+                  </h3>
+                  <p className="text-gray-600 text-sm mb-4">
+                    {template.description || 'A beautiful template to get you started quickly.'}
+                  </p>
+                  
+                  {/* Action Buttons */}
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => handleTemplateSelect(template.id)}
+                      className="flex-1 inline-flex items-center justify-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                      <Sparkles className="mr-2 h-4 w-4" />
+                      Use Template
+                    </button>
+                    <button className="inline-flex items-center justify-center px-3 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                      <Eye className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Help Section */}
+      <div className="bg-gray-50 rounded-lg p-6">
+        <div className="text-center">
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Need help choosing?
+          </h3>
+          <p className="text-gray-600 mb-4">
+            Templates give you a head start with professional designs, while starting from scratch 
+            gives you complete creative control.
+          </p>
+          <div className="flex justify-center space-x-4">
+            <Link 
+              href="/dashboard/my-websites"
+              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            >
+              View your existing websites
+            </Link>
+            <span className="text-gray-300">•</span>
+            <Link 
+              href="/dashboard"
+              className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            >
+              Back to Dashboard
+            </Link>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
