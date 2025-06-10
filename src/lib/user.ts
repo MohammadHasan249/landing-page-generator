@@ -22,6 +22,12 @@ interface ClerkUser {
   last_name?: string;
 }
 
+// Interface for Clerk email address
+interface ClerkEmailAddress {
+  id: string;
+  emailAddress: string;
+}
+
 // Get current authenticated user from Clerk and sync with database
 export async function getCurrentUser(): Promise<User | null> {
   try {
@@ -49,7 +55,7 @@ export async function getCurrentUser(): Promise<User | null> {
           return null;
         }
         
-        const email = clerkUserData.emailAddresses.find((e: any) => e.id === clerkUserData.primaryEmailAddressId)?.emailAddress || 
+        const email = clerkUserData.emailAddresses.find((e: ClerkEmailAddress) => e.id === clerkUserData.primaryEmailAddressId)?.emailAddress || 
                      clerkUserData.emailAddresses[0]?.emailAddress || 
                      `user_${userId}@placeholder.local`; // fallback email
         
