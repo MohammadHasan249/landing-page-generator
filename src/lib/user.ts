@@ -32,15 +32,31 @@ export async function getCurrentUser(): Promise<User | null> {
     }
 
     // Try to find user in our database
-    const user = await db.user.findUnique({
+    let user = await db.user.findUnique({
       where: { id: userId }
     });
 
-    // If user doesn't exist in our DB, the webhook should have created them
-    // But as a fallback, we'll return null and let the webhook handle it
+    // If user doesn't exist in our DB, create them
     if (!user) {
-      console.warn(`User ${userId} authenticated with Clerk but not found in database. Webhook may have failed.`);
-      return null;
+      console.log(`User ${userId} authenticated with Clerk but not found in database. Creating user...`);
+      
+      // We don't have full Clerk user data here, so create with minimal info
+      // The webhook should normally handle this, but this is a fallback
+      try {
+        user = await db.user.create({
+          data: {
+            id: userId,
+            email: '', // Will be updated by webhook or user profile
+            name: null,
+            credits: 10, // Default credits
+            isSubscribed: false,
+          },
+        });
+        console.log(`Successfully created user ${userId} in database`);
+      } catch (createError) {
+        console.error(`Failed to create user ${userId} in database:`, createError);
+        return null;
+      }
     }
 
     return user;
