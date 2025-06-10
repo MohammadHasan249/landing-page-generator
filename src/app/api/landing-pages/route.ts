@@ -6,11 +6,6 @@ export async function GET() {
   try {
     const user = await getCurrentUser();
 
-    // Using a mock user, so no need to check
-    // if (!user) {
-    //   return new NextResponse("Unauthorized", { status: 401 });
-    // }
-
     if (!user) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
@@ -21,6 +16,7 @@ export async function GET() {
       },
       select: {
         id: true,
+        title: true,
         description: true,
         published: true,
         createdAt: true,
@@ -46,11 +42,6 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const user = await getCurrentUser();
-
-    // Using a mock user, so no need to check
-    // if (!user) {
-    //   return new NextResponse("Unauthorized", { status: 401 });
-    // }
 
     if (!user) {
       return new NextResponse("Unauthorized", { status: 401 });

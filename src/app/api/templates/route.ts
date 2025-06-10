@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { getCurrentUser } from '@/lib/user';
 
 export async function GET() {
   try {
-    // Temporarily skip auth checks
-    // const user = await getCurrentUser();
-    // if (!user) {
-    //   return new NextResponse("Unauthorized", { status: 401 });
-    // }
+    const user = await getCurrentUser();
+    
+    if (!user) {
+      return new NextResponse("Unauthorized", { status: 401 });
+    }
 
     // Fetch templates - these are global templates not linked to specific users
     const templates = await db.template.findMany({
